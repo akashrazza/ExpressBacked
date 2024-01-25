@@ -32,5 +32,6 @@ app.post('/question',async (req,res)=>{
 
 
 //Server Running at 8000 port
-module.exports = app;
-module.exports.handler = serverless(app);
+app.listen(8000,()=>{
+    console.log("Server Started on http://localhost:8000");
+});
