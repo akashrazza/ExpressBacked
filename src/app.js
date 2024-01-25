@@ -9,8 +9,8 @@ var cors = require('cors');
 app.use(express.json()); 
 app.use(cors()); 
 mongodb.connect();
-
-app.get('/question',async (req,res)=>{
+const router = express.Router();
+router.get('/question',async (req,res)=>{
     try{
         const Data = await QuestionModel.find();
         res.status(200).json(Data);
@@ -20,7 +20,7 @@ app.get('/question',async (req,res)=>{
     }
 });
 
-app.post('/question',async (req,res)=>{
+router.post('/question',async (req,res)=>{
     try{
         const Data = await QuestionModel.create(req.body);
         res.status(201).json(Data);
@@ -30,8 +30,11 @@ app.post('/question',async (req,res)=>{
     }
 });
 
-
+app.use(`/.netlify/functions/api`, router);
 //Server Running at 8000 port
-app.listen(8000,()=>{
-    console.log("Server Started on http://localhost:8000");
-});
+module.exports = app;
+module.exports.handler = serverless(app);
+// module.exports.handler = async (event, context) => {
+//   const result = await handler(event, context);
+//   return result;
+// };
